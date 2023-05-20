@@ -73,9 +73,16 @@ echo @echo off > open-project.bat
 echo echo Opening the pico developer command prompt >> open-project.bat
 echo call "C:\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-env.cmd" >> open-project.bat
 echo. >> open-project.bat
-echo echo Starting VSCODE >> open-project.bat
-echo code . >> open-project.bat
+echo where code-insiders >nul 2>nul >> open-project.bat
+echo if %%ERRORLEVEL%% EQU 0 ( >> open-project.bat
+echo     echo VSCode insiders is available. Use it instead of VSCode? (y/n) >> open-project.bat
+echo     set /p use_code_insiders= >> open-project.bat
+echo     if /i {%%use_code_insiders%%}=={y} (set code_command=code-insiders) else (set code_command=code) >> open-project.bat
+echo ) else (set code_command=code) >> open-project.bat
+echo. >> open-project.bat
+echo echo Starting %%code_command%% >> open-project.bat
+echo %%code_command%% . >> open-project.bat
 
 rem Start VSCODE with the blink example
 echo Starting VSCODE
-code %PROJECT_PATH%\%PROJECT_NAME%
+.\open-project.bat
